@@ -1,0 +1,33 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+# list out all config files we want to load to the cluster
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  # whenever we build an image do not try to push it
+  # to the docker hub
+  local:
+    push: false
+  # listing images
+  artifacts:
+    - image: yarepka/auth
+      # directory
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      # how to handle any files which change inside auth dir
+      sync:
+        manual:
+          # - if change .ts files, skaffold will try to
+          # put changed file directly into the pod
+          # - if we ever make a change to anything
+          # inside client directory that is not matched 
+          # up by this src rule, then skaffold will try
+          # to rebuild the entire image
+          - src: 'src/**/*.ts'
+            # throw the file to the corresponding path
+            # inside container
+            dest: .
+        

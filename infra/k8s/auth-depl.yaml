@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  # 1 pod to run
+  replicas: 1
+  # take a look at all Pods were created
+  selector:
+    # find Pods with the label app:auth
+    matchLabels:
+      app: auth
+  # here we specifying the configuration of a Pod we want
+  # this deployment to create
+  template:
+    metadata:
+      # we want Pod to have the label app:auth
+      labels:
+        app: auth
+    # describing configuration options of the Pod we 
+    # are about to create
+    spec:
+      # array of containers running inside this Pod
+      containers:
+        - name: auth
+          image: yarepka/auth:latest
+
+# creating clusterIP service          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  # service name
+  name: auth-srv
+spec:
+  # service type ClusterIP (if not specified ClusterIP is default)
+  type: ClusterIP
+  selector:
+    # try to find all pods with label app:auth
+    app: auth
+  ports:
+    - name: ports
+      protocol: TCP
+      # node service port
+      port: 3000
+      # pod port
+      targetPort: 3000
