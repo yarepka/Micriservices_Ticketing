@@ -1,47 +1,47 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: auth-mongo-depl
 spec:
   # 1 pod to run
   replicas: 1
   # take a look at all Pods were created
   selector:
-    # find Pods with the label app:auth
+    # find Pods with the label app: auth-mongo
     matchLabels:
-      app: auth
+      app: auth-mongo
   # here we specifying the configuration of a Pod we want
   # this deployment to create
   template:
     metadata:
-      # we want Pod to have the label app:auth
+      # we want Pod to have the label app:auth-mongo
       labels:
-        app: auth
+        app: auth-mongo
     # describing configuration options of the Pod we 
     # are about to create
     spec:
       # array of containers running inside this Pod
       containers:
-        - name: auth
-          image: yarepka/auth:latest
+        - name: auth-mongo
+          image: mongo
 
 # creating clusterIP service          
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  # service name
-  name: auth-srv
+  # service name (domain name)
+  name: auth-mongo-srv
 spec:
   # service type ClusterIP (if not specified ClusterIP is default)
   type: ClusterIP
   selector:
-    # try to find all pods with label app:auth
-    app: auth
+    # try to find all pods with label app:auth-mongo
+    app: auth-mongo
   ports:
-    - name: auth
+    - name: db
       protocol: TCP
       # node service port
-      port: 3000
+      port: 27017
       # pod port
-      targetPort: 3000
+      targetPort: 27017
