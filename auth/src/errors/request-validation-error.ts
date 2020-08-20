@@ -1,6 +1,8 @@
 import { ValidationError } from 'express-validator';
 import { CustomError } from './custom-error';
 
+// Error object with formatted errors from 
+//'express-validator' middleware
 export class RequestValidationError extends CustomError {
   statusCode = 400;
 

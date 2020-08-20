@@ -14,7 +14,7 @@ spec:
   # this deployment to create
   template:
     metadata:
-      # we want Pod to have the label app:auth
+      # we want Pod to have the label app:auth  
       labels:
         app: auth
     # describing configuration options of the Pod we 
@@ -24,6 +24,18 @@ spec:
       containers:
         - name: auth
           image: yarepka/auth:latest
+          # set secret variables to env
+          env:
+            # name in order to access in in environment
+            - name: JWT_KEY
+              valueFrom:
+                # reference to the secret
+                secretKeyRef:
+                  # secret name
+                  name: jwt-secret
+                  # secret key
+                  key: JWT_KEY
+
 
 # creating clusterIP service          
 ---

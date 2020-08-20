@@ -3,6 +3,7 @@ import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
 import mongoose from 'mongoose';
+import cookieSession from 'cookie-session';
 
 import { currentUserRouter } from './routes/current-user';
 import { signinRouter } from './routes/signin';
@@ -13,6 +14,23 @@ import { NotFoundError } from './errors/not-found-error';
 
 const app = express();
 app.use(json());
+// truffic being proxied through ingress and express
+// will see that and by default it will not trust this
+// http connection, here we make express to be aware of
+// proxy 
+app.set('trust proxy', true);
+
+/*
+A user session can be stored in two main ways with cookies: on the server or on the client. This module stores the session data on the client within a cookie, while a module like express-session stores only a session identifier on the client within a cookie and stores the session data on the server, typically in a database.
+ */
+app.use(
+  cookieSession({
+    signed: false, // disable enryption because we use JWT
+    // cookies will only be used if user visiting our app over
+    // https connection
+    secure: true
+  })
+)
 
 app.use(currentUserRouter);
 app.use(signinRouter);
@@ -29,6 +47,11 @@ app.all('*', async (req, res, next) => {
 app.use(errorHandler);
 
 const start = async () => {
+  // check if environment variable defined
+  if (!process.env.JWT_KEY) {
+    throw new Error('JWT_KEY must be defined');
+  }
+
   try {
     // connecting to database
     await mongoose.connect('mongodb://auth-mongo-srv:27017/auth', {

@@ -31,6 +31,31 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   }
+}, {
+  // reformat the way object looks whenever format to JSON
+  /* 
+    old look
+    {
+      "_id": "bopjg0934t0934",
+      "email": "email@email.com",
+      "password": "lgdjkfhgperohopeh",
+      "__v: 0"
+    }
+
+    new look
+    {
+      "email": "email@email.com",
+      "id": "bopjg0934t0934"
+    }
+  */
+  toJSON: {
+    transform(doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+      delete ret.password;
+      delete ret.__v;
+    }
+  }
 });
 
 // whener we try to save document to the database, 
@@ -39,7 +64,7 @@ const userSchema = new mongoose.Schema({
 // if we use arrow function then the value of "this"
 // will be overriden and would be equal to the context
 // of this entire file as opposed to(v otlichie ot) our
-// use document
+// user document
 userSchema.pre('save', async function (done) {
   // if password was not modified, well then we don't want
   // to rehash it. Only hash password if it was modified
