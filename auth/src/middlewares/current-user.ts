@@ -40,7 +40,7 @@ export const currentUser = (
 
   try {
     // TS thinks that JWT_KEY might be undefined, but
-    // we've already checked it in the index.ts filed in
+    // we've already checked it in the app.ts file in
     // the start() function, so add "!" symbol in the 
     // end of process.env.JWT_KEY
     const payload = jwt.verify(req.session.jwt, process.env.JWT_KEY!) as UserPayload;
