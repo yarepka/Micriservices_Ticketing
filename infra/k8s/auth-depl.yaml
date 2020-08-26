@@ -51,7 +51,7 @@ spec:
     # try to find all pods with label app:auth
     app: auth
   ports:
-    - name: auth
+    - name: auth #for loggin purposes
       protocol: TCP
       # node service port
       port: 3000

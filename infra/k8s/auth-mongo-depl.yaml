@@ -39,7 +39,7 @@ spec:
     # try to find all pods with label app:auth-mongo
     app: auth-mongo
   ports:
-    - name: db
+    - name: db #for loggin purposes
       protocol: TCP
       # node service port
       port: 27017

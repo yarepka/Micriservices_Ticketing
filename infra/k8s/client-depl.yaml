@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-depl
+spec:
+  # 1 pod to run
+  replicas: 1
+  # take a look at all Pods were created
+  selector:
+    # find Pods with the label app:client
+    matchLabels:
+      app: client
+  # here we specifying the configuration of a Pod we want
+  # this deployment to create
+  template:
+    metadata:
+      # we want Pod to have the label app:client 
+      labels:
+        app: client
+    # describing configuration options of the Pod we 
+    # are about to create
+    spec:
+      # array of containers running inside this Pod
+      containers:
+        - name: client
+          image: yarepka/client:latest
+      # hostAliases added as a solution for not having
+      # ingress namespace whenever using minikube
+      # configuring /etc/hosts
+      hostAliases:
+        - ip: '192.168.99.101' # minikube ip
+          hostnames:
+            - 'ticketing.dev'
+
+
+# creating clusterIP service          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  # service name
+  name: client-srv
+spec:
+  # service type ClusterIP (if not specified ClusterIP is default)
+  type: ClusterIP
+  selector:
+    # try to find all pods with label app:client
+    app: client
+  ports:
+    - name: client # for loggin purposes
+      protocol: TCP
+      # node service port
+      port: 3000
+      # pod port
+      targetPort: 3000

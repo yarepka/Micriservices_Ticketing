@@ -23,11 +23,19 @@ build:
           # - if change .ts files, skaffold will try to
           # put changed file directly into the pod
           # - if we ever make a change to anything
-          # inside client directory that is not matched 
+          # inside auth directory that is not matched 
           # up by this src rule, then skaffold will try
           # to rebuild the entire image
           - src: 'src/**/*.ts'
             # throw the file to the corresponding path
             # inside container
             dest: .
-        
+
+    - image: yarepka/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
