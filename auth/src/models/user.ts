@@ -8,17 +8,18 @@ interface UserAttrs {
   password: string;
 };
 
-// An interface that describes the properties
-// that a User Model has
-interface UserModel extends mongoose.Model<UserDoc> {
-  build(attrs: UserAttrs): UserDoc;
-}
-
 // An interface that describes the properties 
-// that a User Document has
+// that a SAVED User Document has
 interface UserDoc extends mongoose.Document {
   email: string;
   password: string;
+}
+
+// An interface that describes the properties
+// we assign to User model, model represents the 
+// entire collection of data
+interface UserModel extends mongoose.Model<UserDoc> {
+  build(attrs: UserAttrs): UserDoc;
 }
 
 const userSchema = new mongoose.Schema({
@@ -67,7 +68,7 @@ const userSchema = new mongoose.Schema({
 // user document
 userSchema.pre('save', async function (done) {
   // if password was not modified, well then we don't want
-  // to rehash it. Only hash password if it was modified
+  // to rehash it. Only hash(encrypt) password if it was modified
   if (this.isModified('password')) {
     const hashed = await Password.toHash(this.get('password'));
     this.set('password', hashed);

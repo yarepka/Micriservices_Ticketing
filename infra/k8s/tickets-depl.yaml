@@ -1,33 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: tickets-depl
 spec:
   # 1 pod to run
   replicas: 1
   # take a look at all Pods were created
   selector:
-    # find Pods with the label app:auth
+    # find Pods with the label app:tickets
     matchLabels:
-      app: auth
+      app: tickets
   # here we specifying the configuration of a Pod we want
   # this deployment to create
   template:
     metadata:
-      # we want Pod to have the label app:auth  
+      # we want Pod to have the label app:tickets  
       labels:
-        app: auth
+        app: tickets
     # describing configuration options of the Pod we 
     # are about to create
     spec:
       # array of containers running inside this Pod
       containers:
-        - name: auth
-          image: yarepka/auth:latest
+        - name: tickets
+          image: yarepka/tickets:latest
           # set secret variables to env
           env:
             - name: MONGO_URI
-              value: 'mongodb://auth-mongo-srv:27017/auth'
+              value: 'mongodb://tickets-mongo-srv:27017/tickets'
             # name in order to access in in environment
             - name: JWT_KEY
               valueFrom:
@@ -45,15 +45,15 @@ apiVersion: v1
 kind: Service
 metadata:
   # service name
-  name: auth-srv
+  name: tickets-srv
 spec:
   # service type ClusterIP (if not specified ClusterIP is default)
   type: ClusterIP
   selector:
-    # try to find all pods with label app:auth
-    app: auth
+    # try to find all pods with label app:tickets
+    app: tickets
   ports:
-    - name: auth #for loggin purposes
+    - name: tickets #for loggin purposes
       protocol: TCP
       # node service port
       port: 3000

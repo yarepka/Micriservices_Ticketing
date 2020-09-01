@@ -4,11 +4,12 @@ import 'express-async-errors';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 
-import { currentUserRouter } from './routes/current-user';
-import { signinRouter } from './routes/signin';
-import { signoutRouter } from './routes/signout';
-import { signupRouter } from './routes/signup';
+import { currentUser } from '@yarepkatickets/common';
 import { errorHandler, NotFoundError } from '@yarepkatickets/common';
+import { createTicketRouter } from './routes/new';
+import { showTicketRouter } from './routes/show';
+import { indexTicketRouter } from './routes/index';
+import { updateTicketRouter } from './routes/update';
 
 const app = express();
 app.use(json());
@@ -30,10 +31,12 @@ app.use(
   })
 )
 
-app.use(currentUserRouter);
-app.use(signinRouter);
-app.use(signoutRouter);
-app.use(signupRouter);
+app.use(currentUser);
+
+app.use(createTicketRouter);
+app.use(showTicketRouter);
+app.use(indexTicketRouter);
+app.use(updateTicketRouter);
 
 // if user entered the route which is not specified at 
 // the top, then throw the NotFoundError, so errorHandler
