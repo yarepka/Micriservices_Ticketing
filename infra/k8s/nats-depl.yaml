@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nats-depl
+spec:
+  # 1 pod to run
+  replicas: 1
+  # take a look at all Pods were created
+  selector:
+    # find Pods with the label app: nats
+    matchLabels:
+      app: nats
+  # here we specifying the configuration of a Pod we want this deployment to create
+  template:
+    metadata:
+      # we want Pod to have the label app:nats
+      labels:
+        app: nats
+    # describing configuration options of the Pod we are about to create
+    spec:
+      # array of containers running inside the Pod
+      containers:
+        - name: nats
+          image: nats-streaming:0.17.0
+          # here we provide commandline options
+          args: [
+            '-p',
+            '4222',
+            '-m',
+            '8222',
+            # hb - heart beat mechanism
+            # hbi - how often NATS streaming server is going to
+            # make a heart beat request to each of its clients
+            '-hbi',
+            '5s',
+            # hbt - how long each client has to respond
+            '-hbt',
+            '5s',
+            # hbf - number of times each client can fail before NATS
+            # streaming server is going to assume that that connection
+            # is dead and gone
+            '-hbf',
+            '2',
+            '-SD',
+            # Cluster ID
+            '-cid',
+            'ticketing'
+          ]
+
+# creating clusterIP service
+---
+apiVersion: v1
+# type of object
+kind: Service
+metadata:
+  # service name
+  name: nats-srv
+spec:
+  # service type ClusterIP (if not specified ClusterIP is default)
+  type: ClusterIP
+  selector:
+    # try to find all pods with label app: nats
+    app: nats
+  ports:
+    - name: client # for loggin purposes
+      protocol: TCP
+      # node service port
+      port: 4222
+      # pod port
+      targetPort: 4222
+      # we can access NATS streaming server in our browser on port 8222
+      # to get info about subsribtions, clients, incomming traffic statistics
+    - name: monitoring 
+      protocol: TCP
+      port: 8222
+      targetPort: 8222
+

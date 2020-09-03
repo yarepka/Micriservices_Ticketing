@@ -25,6 +25,12 @@ spec:
             backend:
               serviceName: auth-srv
               servicePort: 3000
+          - path: /api/tickets/?(.*)
+            backend:
+              serviceName: tickets-srv
+              servicePort: 3000
+          # catch all routes which were not catched
+          # by the routes above
           - path: /?(.*)
             backend:
               serviceName: client-srv
