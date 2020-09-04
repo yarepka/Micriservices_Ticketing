@@ -1,6 +1,5 @@
 // Publisher - Creates event/messages
 import nats from 'node-nats-streaming';
-import { TicketCreatedPublisher } from './events/ticket-created-publisher'
 
 // client = stan
 // we use this client to connect to NATS streaming server,
@@ -14,22 +13,22 @@ const stan = nats.connect('ticketing', 'abs', {
 // we can't use async/await syntax, instead we use event-driven approch
 // second argument function will be executed after client successfully
 // connected to NATS streaming server
-stan.on('connect', async () => {
+stan.on('connect', () => {
   console.log('Publisher connected to NATS');
 
-  const publisher = new TicketCreatedPublisher(stan);
-  // remember that publishing is async operation, what if we need 
-  // to w8 for message/event to be published before going further.
-  // we need something like 'await'. We solve it with returning the
-  // promise from the publish() method in the Publisher abstract class
-  try {
-    await publisher.publish({
-      id: '123',
-      title: 'concert',
-      price: 20
-    });
-  } catch (err) {
-    console.error(err);
-  }
+  // we can only share strings or row data, but data below
+  // is an object, we can't share javascript object directly
+  // we need to convert it into JSON first
+  const data = JSON.stringify({
+    id: '123',
+    title: 'concert',
+    price: 20
+  });
+
+  // publish event
+  // information which we send is a message/event
+  stan.publish('ticket:created', data, () => {
+    console.log('Event published')
+  });
 
 });
