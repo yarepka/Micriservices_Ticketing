@@ -14,6 +14,12 @@ declare global {
   }
 }
 
+// Mocking(Facking) imports with Jest
+// so if any file is trying to import a real 
+// nats-wrapper file, the import will be redirected
+// to the mock file
+jest.mock('../nats-wrapper');
+
 // this function will be assigned to global scope
 // so we can easily use it from our different test files
 // but it'll not be available in NOT testing environment
@@ -57,6 +63,9 @@ beforeAll(async () => {
 
 // will run before each of test
 beforeEach(async () => {
+  // clear Mocks data before each test
+  jest.clearAllMocks();
+
   // reach to mongodb database and reset/remove
   // the data there, so each test will have empty
   // db data to start with

@@ -2,6 +2,7 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket';
 import mongoose from 'mongoose';
+import { natsWrapper } from '../../nats-wrapper';
 
 // 400 - Invalid Request
 // 401 - Forbidden 
@@ -114,3 +115,31 @@ it('updates the ticket provided valid inputs', async () => {
   expect(ticketResponse.body.title).toEqual(newTitle);
   expect(ticketResponse.body.price).toEqual(newPrice);
 });
+
+it('publishes an event', async () => {
+  // save cookie for further request
+  const cookie = global.signin();
+
+  // create ticket
+  const response = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', cookie)
+    .send({
+      title: 'title',
+      price: 20
+    });
+
+  const newTitle = 'NewTitle';
+  const newPrice = 100;
+
+  await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send({
+      title: newTitle,
+      price: newPrice
+    })
+    .expect(200);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+})

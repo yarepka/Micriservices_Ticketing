@@ -26,6 +26,19 @@ spec:
           image: yarepka/tickets:latest
           # set secret variables to env
           env:
+            - name: NATS_CLIENT_ID
+              # we want to use pod's name and use it as a value
+              # Remember we can have multiple pod's of the 
+              # same service running, each of it will have
+              # unique NATS_CLIENT_ID, example: 
+              # tickets-depl-fc79fbdf8-5dmc5
+              valueFrom: 
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: ticketing
             - name: MONGO_URI
               value: 'mongodb://tickets-mongo-srv:27017/tickets'
             # name in order to access in in environment

@@ -84,7 +84,7 @@ stan.on('connect', () => {
 
 // Watching for interupt or terminate signals, those signals send to
 // this process, whenever ts-node-dev trys to restart our program
-// or any time you hit Cntrl+C at your terminal
+// or any time you hit Ctrl+C at your terminal
 
 // *** This might not work correct on Windows ***
 // interupt signal
