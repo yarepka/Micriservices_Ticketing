@@ -29,6 +29,10 @@ spec:
             backend:
               serviceName: tickets-srv
               servicePort: 3000
+          - path: /api/orders/?(.*)
+            backend:
+              serviceName: orders-srv
+              servicePort: 3000
           # catch all routes which were not catched
           # by the routes above
           - path: /?(.*)
