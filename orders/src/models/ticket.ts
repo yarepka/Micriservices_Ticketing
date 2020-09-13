@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
 import { Order, OrderStatus } from './order';
 
@@ -17,6 +18,7 @@ interface TicketAttrs {
 export interface TicketDoc extends mongoose.Document {
   title: string;
   price: number;
+  version: number;
   isReserved(): Promise<boolean>
 };
 
@@ -25,6 +27,9 @@ export interface TicketDoc extends mongoose.Document {
 // entire collection of data
 interface TicketModel extends mongoose.Model<TicketDoc> {
   build(attrs: TicketAttrs): TicketDoc;
+  // queries the Ticket of 'version = data.version - 1' / 'version = event.version - 1'
+  // and '_id = data.id' / '_id = event.id'
+  findByEvent(event: { id: string, version: number }): Promise<TicketDoc | null>;
 };
 
 const ticketSchema = new mongoose.Schema({
@@ -47,6 +52,11 @@ const ticketSchema = new mongoose.Schema({
   }
 });
 
+// instead of default '__v' field use 'version'
+ticketSchema.set('versionKey', 'version');
+// use mongoose-update-if-current(check npm for doc) module
+// for 'optimistic concurrency control' (OCC)
+ticketSchema.plugin(updateIfCurrentPlugin);
 
 // add method to Model
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
@@ -56,6 +66,15 @@ ticketSchema.statics.build = (attrs: TicketAttrs) => {
     price: attrs.price
   });
 }
+
+// query previous version Ticket, previous relativly to 
+// event data.version/event.version
+ticketSchema.statics.findByEvent = (event: { id: string, version: number }) => {
+  return Ticket.findOne({
+    _id: event.id,
+    version: event.version - 1
+  })
+};
 
 // add method to Document
 ticketSchema.methods.isReserved = async function () {

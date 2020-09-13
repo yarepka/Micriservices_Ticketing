@@ -5,12 +5,12 @@ import {
   validateRequest,
   NotFoundError,
   NotAuthorizedError,
-  currentUser
+  currentUser,
+  BadRequestError
 } from '@yarepkatickets/common';
 import { Ticket } from '../models/ticket';
 import { TicketUpdatedPublisher } from '../events/publishers/ticket-updated-publisher';
 import { natsWrapper } from '../nats-wrapper';
-import { TicketCreatedPublisher } from '../events/publishers/ticket-created-publisher';
 
 const router = express.Router();
 
@@ -36,6 +36,10 @@ router.put('/api/tickets/:id',
       throw new NotFoundError();
     }
 
+    if (ticket.orderId) {
+      throw new BadRequestError('Can\'t edit a reserved ticket');
+    }
+
     if (ticket.userId !== req.currentUser!.id) {
       // user is trying to edit the ticket he do not own
       throw new NotAuthorizedError();
@@ -51,7 +55,8 @@ router.put('/api/tickets/:id',
       id: ticket.id,
       title: ticket.title,
       price: ticket.price,
-      userId: ticket.userId
+      userId: ticket.userId,
+      version: ticket.version
     });
 
     res.send(ticket);

@@ -5,7 +5,7 @@ import { Order } from '../models/order';
 
 const router = express.Router();
 
-// Get details about a specific order for logged in user
+// Get details about a specific order by orderId for logged in user
 router.get('/api/orders/:orderId',
   requireAuth,
   async (req: Request, res: Response) => {

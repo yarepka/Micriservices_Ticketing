@@ -8,8 +8,12 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
   // will be in diff channels
   queueGroupName = queueGroupName;
   async onMessage(data: TicketUpdatedEvent['data'], msg: Message) {
-    const ticket = await Ticket.findById(data.id);
+    const ticket = await Ticket.findByEvent(data);
+
     if (!ticket) {
+      // after 5 seconds of throwing an error and not calling
+      // msg.ack(), NATS Streaming Server will automatically
+      // re-dispatch/re-emit the event we failed to process
       throw new Error('Ticket not found');
     }
 
