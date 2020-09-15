@@ -30,7 +30,6 @@ build:
             # throw the file to the corresponding path
             # inside container
             dest: .
-
     - image: yarepka/client
       context: client
       docker:
@@ -39,7 +38,6 @@ build:
         manual:
           - src: '**/*.js'
             dest: .
-
     - image: yarepka/tickets
       context: tickets
       docker:
@@ -48,9 +46,16 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-    
     - image: yarepka/orders
       context: orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: yarepka/expiration
+      context: expiration
       docker:
         dockerfile: Dockerfile
       sync:

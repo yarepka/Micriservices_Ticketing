@@ -10,7 +10,7 @@ import { OrderCreatedPublisher } from '../events/publishers/order-created-publis
 
 const router = express.Router();
 
-const EXPIRATION_WINDOW_SECONDS = 900; // 15 min
+const EXPIRATION_WINDOW_SECONDS = 1 * 60;
 
 // Create an order to purchase the specified ticket
 router.post(
