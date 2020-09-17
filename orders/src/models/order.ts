@@ -30,7 +30,7 @@ interface OrderDoc extends mongoose.Document {
 };
 
 // An interface that describes the properties
-// we assign to User model, model represents the 
+// we assign to Order model, model represents the 
 // entire collection of data
 interface OrderModel extends mongoose.Model<OrderDoc> {
   build(attrs: OrderAttrs): OrderDoc;

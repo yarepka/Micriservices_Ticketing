@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-depl
+spec:
+  # 1 pod to run
+  replicas: 1
+  # take a look at all Pods were created
+  selector:
+    # find Pods with the label app:payments
+    matchLabels:
+      app: payments
+  # here we specifying the configuration of a Pod we want
+  # this deployment to create
+  template:
+    metadata:
+      # we want Pod to have the label app:payments  
+      labels:
+        app: payments
+    # describing configuration options of the Pod we 
+    # are about to create
+    spec:
+      # array of containers running inside this Pod
+      containers:
+        - name: payments
+          image: yarepka/payments:latest
+          # set secret variables to env
+          env:
+            - name: NATS_CLIENT_ID
+              # we want to use pod's name and use it as a value
+              # Remember we can have multiple pod's of the 
+              # same service running, each of it will have
+              # unique NATS_CLIENT_ID, example: 
+              # payments-depl-fc79fbdf8-5dmc5
+              valueFrom: 
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: ticketing
+            - name: MONGO_URI
+              value: 'mongodb://payments-mongo-srv:27017/payments'
+            # name in order to access in in environment
+            - name: JWT_KEY
+              valueFrom:
+                # reference to the secret
+                secretKeyRef:
+                  # secret name
+                  name: jwt-secret
+                  # secret key
+                  key: JWT_KEY
+            - name: STRIPE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-secret
+                  key: STRIPE_KEY
+
+
+# creating clusterIP service          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  # service name
+  name: payments-srv
+spec:
+  # service type ClusterIP (if not specified ClusterIP is default)
+  type: ClusterIP
+  selector:
+    # try to find all pods with label app:payments
+    app: payments
+  ports:
+    - name: payments #for loggin purposes
+      protocol: TCP
+      # node service port
+      port: 3000
+      # pod port
+      targetPort: 3000

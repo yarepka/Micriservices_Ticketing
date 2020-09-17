@@ -23,7 +23,7 @@ export interface TicketDoc extends mongoose.Document {
 };
 
 // An interface that describes the properties
-// we assign to User model, model represents the 
+// we assign to Ticket model, model represents the 
 // entire collection of data
 interface TicketModel extends mongoose.Model<TicketDoc> {
   build(attrs: TicketAttrs): TicketDoc;
