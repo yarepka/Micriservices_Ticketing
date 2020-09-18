@@ -12,7 +12,9 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
   return (
     <div>
       <Header currentUser={currentUser} />
-      <Component currentUser={currentUser} {...pageProps} />
+      <div className="container">
+        <Component currentUser={currentUser} {...pageProps} />
+      </div>
     </div>
   );
 };
@@ -35,13 +37,14 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
 AppComponent.getInitialProps = async appContext => {
   console.log(appContext);
   // will share data with Header component
-  const { data } = await buildClient(appContext.ctx).get('/api/users/currentuser');
+  const client = buildClient(appContext.ctx);
+  const { data } = await client.get('/api/users/currentuser');
 
   let pageProps = {};
   // if current Component has getInitialProps() function
   // manually call it
   if (appContext.Component.getInitialProps) {
-    pageProps = await appContext.Component.getInitialProps(appContext.ctx);
+    pageProps = await appContext.Component.getInitialProps(appContext.ctx, client, data.currentUser);
   }
 
   return {
