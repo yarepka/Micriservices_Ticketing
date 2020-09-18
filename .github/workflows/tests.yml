@@ -11,5 +11,5 @@ jobs:
     steps:
       # take all the code our our project
       - uses: actions/checkout@v2
-      # run all the tests inside of auth service
+      # run all the tests inside of auth service, test:ci runs test one time, not watching like npm run test doing
       - run: cd auth && npm install && npm run test:ci
