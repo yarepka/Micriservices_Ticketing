@@ -1,4 +1,4 @@
-name: Tests
+name: tests-tickets
 # determine when we are going to run the workflow (code pushed/pull request created/pull request close/repo is forked)
 on:
   # will run whenever pull_request created/updated/reopened
@@ -12,4 +12,4 @@ jobs:
       # take all the code our our project
       - uses: actions/checkout@v2
       # run all the tests inside of auth service, test:ci runs test one time, not watching like npm run test doing
-      - run: cd auth && npm install && npm run test:ci
+      - run: cd tickets && npm install && npm run test:ci
