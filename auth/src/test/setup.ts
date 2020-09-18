@@ -17,6 +17,7 @@ declare global {
 // but it'll not be available in NOT testing environment
 
 global.signin = async () => {
+  jest.setTimeout(30000);
   const email = 'test@test.com';
   const password = 'password';
 
