@@ -2,7 +2,11 @@ name: tests-orders
 # determine when we are going to run the workflow (code pushed/pull request created/pull request close/repo is forked)
 on:
   # will run whenever pull_request created/updated/reopened
-  pull_request
+  pull_request:
+    # if and only if there are changes to the files in 'orders' 
+    # directory then run the job(test)
+    paths:
+      - 'orders/**'
 jobs:
   build:
     # we want to startup some kind of virtual machine which runs ubuntu OS
