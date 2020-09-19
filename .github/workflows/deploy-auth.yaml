@@ -1,0 +1,29 @@
+name: deploy-auth
+
+# specify when it should be executed
+on:
+  # whenever we close or merge pull request it's counts as a push to the master branch
+  push:
+    branches: 
+      - master
+    # only run whenever something inside auth directory changes
+    paths:
+      - 'auth/**'
+jobs:
+  build:
+    # like docker image, container
+    runs-on: ubuntu-latest
+    steps:
+      # checkout all our code inside of the repo
+      - uses: actions/checkout@v2
+      # docker is preinstalled on ubuntu
+      # creating an image
+      - run: cd auth && docker build -t yarepka/auth .
+      # remember we added secrets
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      # push auth image to the hub
+      - run: docker push yarepka/auth
+      
