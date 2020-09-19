@@ -24,7 +24,7 @@ spec:
       containers:
         - name: client
           image: yarepka/client:latest
-    # HERE WAS THE LINE, CHECK k8s-dev/client-depl.yaml
+    # HERE WAS THE LINE, CHECK k8s-dev/client-depl.yaml 
 
 
 # creating clusterIP service          
