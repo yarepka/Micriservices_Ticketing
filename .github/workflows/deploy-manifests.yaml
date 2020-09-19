@@ -1,0 +1,24 @@
+name: deploy-manifests
+
+# specify when it should be executed
+on:
+  # whenever we close or merge pull request it's counts as a push to the master branch
+  push:
+    branches: 
+      - master
+    # only run whenever something inside infra directory changes
+    paths:
+      - 'infra/**'
+jobs:
+  build:
+    # like docker image, container
+    runs-on: ubuntu-latest
+    steps:
+      # checkout all our code inside of the repo
+      - uses: actions/checkout@v2
+      - uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - run: doctl kubernetes cluster kubeconfig save <cluster_name>
+      # we want to apply all config files in the infra/k8 directory
+      - run: kubectl apply -f infra/k8s
