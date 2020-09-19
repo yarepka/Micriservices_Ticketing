@@ -18,6 +18,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: digitalocean/action-doctl@v2
         with:
+          # digital ocean token
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       - run: doctl kubernetes cluster kubeconfig save ticketing
       # we want to apply all config files in the infra/k8 directory
