@@ -1,0 +1,45 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-srv
+  # will tell ingress controller that we try to feed it
+  # some routing rules
+  annotations:
+    # ingress controller will continiously scan all
+    # the objects or different config files and it
+    # will try to find the one which has this annotation
+    kubernetes.io/ingress.class: nginx
+    # need in order to use rexExp in the path
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+spec:
+  # routing rules
+  rules:
+    # ingress assumess that we hosting many different apps
+    # at different local domains (we can have a lot of apps 
+    # with different local domains in our kubernetes 
+    # cluster)
+    - host: ticketing.dev
+      http: 
+        paths:
+          - path: /api/payments/?(.*)
+            backend:
+              serviceName: payments-srv
+              servicePort: 3000
+          - path: /api/users/?(.*)
+            backend:
+              serviceName: auth-srv
+              servicePort: 3000
+          - path: /api/tickets/?(.*)
+            backend:
+              serviceName: tickets-srv
+              servicePort: 3000
+          - path: /api/orders/?(.*)
+            backend:
+              serviceName: orders-srv
+              servicePort: 3000
+          # catch all routes which were not catched
+          # by the routes above
+          - path: /?(.*)
+            backend:
+              serviceName: client-srv
+              servicePort: 3000

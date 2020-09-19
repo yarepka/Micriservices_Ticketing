@@ -24,6 +24,7 @@ spec:
       containers:
         - name: client
           image: yarepka/client:latest
+      # IMPORTANT NEED TO BE CHANGED WHENEVER DO DEPLOY
       # hostAliases added as a solution for not having
       # ingress namespace whenever using minikube
       # configuring /etc/hosts
