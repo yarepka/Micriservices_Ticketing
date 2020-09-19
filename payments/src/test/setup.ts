@@ -1,7 +1,6 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
-import config from 'config';
 
 declare global {
   namespace NodeJS {
@@ -13,7 +12,7 @@ declare global {
 
 jest.mock('../nats-wrapper');
 
-process.env.STRIPE_KEY = config.get('STRIPE_KEY');
+process.env.STRIPE_KEY = 'sk_test_y1md8wv7EObszNHcbkfV6Ch400a9IXBDdE';
 
 let mongo: any;
 beforeAll(async () => {
