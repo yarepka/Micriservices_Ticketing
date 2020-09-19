@@ -18,7 +18,7 @@ spec:
     # at different local domains (we can have a lot of apps 
     # with different local domains in our kubernetes 
     # cluster)
-    - host: ticketing.dev
+    - host: www.yarepka.xyz
       http: 
         paths:
           - path: /api/payments/?(.*)
