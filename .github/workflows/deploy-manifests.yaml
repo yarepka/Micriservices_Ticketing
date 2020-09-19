@@ -19,6 +19,6 @@ jobs:
       - uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      - run: doctl kubernetes cluster kubeconfig save <cluster_name>
+      - run: doctl kubernetes cluster kubeconfig save ticketing
       # we want to apply all config files in the infra/k8 directory
       - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod

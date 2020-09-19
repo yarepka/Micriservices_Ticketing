@@ -29,7 +29,7 @@ jobs:
       - uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      - run: doctl kubernetes cluster kubeconfig save <cluster_name>
+      - run: doctl kubernetes cluster kubeconfig save ticketing
       # use the latest image auth-depl is the name from the infra/auth-depl.yaml file
       - run: kubectl rollout restart deployment auth-depl
       
