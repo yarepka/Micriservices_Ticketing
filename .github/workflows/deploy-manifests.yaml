@@ -21,4 +21,4 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
       - run: doctl kubernetes cluster kubeconfig save <cluster_name>
       # we want to apply all config files in the infra/k8 directory
-      - run: kubectl apply -f infra/k8s
+      - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
