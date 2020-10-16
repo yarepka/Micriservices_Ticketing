@@ -26,7 +26,8 @@ app.use(
     signed: false, // disable enryption because we use JWT
     // cookies will only be shared if user visiting our app over
     // https connection
-    secure: process.env.NODE_ENV !== 'test'
+    //secure: process.env.NODE_ENV !== 'test'
+    secure: false,
   })
 )
 

@@ -23,7 +23,12 @@ export default ({ req }) => {
     // We are on the server
     return axios.create({
       //baseUrl: 'http://ingress-nginx.ingress-nginx.svc.cluster.local',
+<<<<<<< HEAD
       baseURL: `${req['x-forwarded-proto']}://${req.headers.host}`,
+=======
+      //baseURL: `${req['x-forwarded-proto']}://${req.headers.host}`,
+      baseURL: 'http://www.yarepka.xyz/',
+>>>>>>> fb6603f813036a763cfe1cd5a773378a8fe472db
       headers: req.headers
     });
   } else {

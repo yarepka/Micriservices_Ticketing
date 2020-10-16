@@ -23,8 +23,26 @@ const LandingPage = ({ currentUser, tickets }) => {
   });
 
   return (
+<<<<<<< HEAD
     <div className="tickets">
       {ticketList}
+=======
+    <div>
+      <h2>Tickets</h2>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {ticketList}
+        </tbody>
+      </table>
+>>>>>>> fb6603f813036a763cfe1cd5a773378a8fe472db
     </div>
   )
 };
