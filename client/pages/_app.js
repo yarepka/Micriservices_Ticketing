@@ -1,4 +1,4 @@
-import 'bootstrap/dist/css/bootstrap.css';
+import './style.css';
 import buildClient from '../api/build-client';
 import Header from '../components/Header';
 
@@ -10,11 +10,9 @@ import Header from '../components/Header';
 // which will be visible on every single page
 const AppComponent = ({ Component, pageProps, currentUser }) => {
   return (
-    <div>
+    <div className="container">
       <Header currentUser={currentUser} />
-      <div className="container">
-        <Component currentUser={currentUser} {...pageProps} />
-      </div>
+      <Component currentUser={currentUser} {...pageProps} />
     </div>
   );
 };

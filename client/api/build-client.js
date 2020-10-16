@@ -22,8 +22,8 @@ export default ({ req }) => {
   if (typeof window === 'undefined') {
     // We are on the server
     return axios.create({
-      baseUrl: 'http://ingress-nginx.ingress-nginx.svc.cluster.local',
-      //baseURL: `${req['x-forwarded-proto']}://${req.headers.host}`,
+      //baseUrl: 'http://ingress-nginx.ingress-nginx.svc.cluster.local',
+      baseURL: `${req['x-forwarded-proto']}://${req.headers.host}`,
       headers: req.headers
     });
   } else {

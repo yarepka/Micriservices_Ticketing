@@ -9,10 +9,10 @@ const OrderShow = ({ order, currentUser }) => {
     url: '/api/payments',
     method: 'post',
     body: {
-      orderId: order.id
+      orderId: order.id,
     },
     onSuccess: () => Router.push('/orders'),
-  })
+  });
 
   useEffect(() => {
     const findTimeLeft = () => {
@@ -31,19 +31,21 @@ const OrderShow = ({ order, currentUser }) => {
   }, []);
 
   if (timeLeft < 0) {
-    return <div>Order Expired</div>
+    return <div>Order Expired</div>;
   }
 
-  return <div>
-    Time left to pay: {timeLeft} seconds
-    <StripeCheckout
-      token={({ id }) => doRequest({ token: id })}
-      stripeKey="pk_test_Gb0qF4W8AhEbA1L2cp2ohoPl00v0zXCHCn"
-      amount={order.ticket.price * 100}
-      email={currentUser.email}
-    />
-    {errors}
-  </div>
+  return (
+    <div>
+      Time left to pay: {timeLeft} seconds:{' '}
+      <StripeCheckout
+        token={({ id }) => doRequest({ token: id })}
+        stripeKey='pk_test_Gb0qF4W8AhEbA1L2cp2ohoPl00v0zXCHCn'
+        amount={order.ticket.price * 100}
+        email={currentUser.email}
+      />
+      {errors}
+    </div>
+  );
 };
 
 OrderShow.getInitialProps = async (context, client) => {
@@ -53,6 +55,6 @@ OrderShow.getInitialProps = async (context, client) => {
   const { data } = await client.get(`/api/orders/${orderId}`);
 
   return { order: data };
-}
+};
 
 export default OrderShow;
