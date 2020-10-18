@@ -4,47 +4,25 @@ import Empty from '../components/Empty';
 
 const LandingPage = ({ currentUser, tickets }) => {
   if (tickets.length <= 0) {
-    return <Empty />
+    return <Empty />;
   }
 
-  const ticketList = tickets.map(ticket => {
+  const ticketList = tickets.map((ticket) => {
     return (
-      <div className="ticket card">
+      <div className='ticket card'>
         <h2>{ticket.title}</h2>
-        <div className="price">
+        <div className='price'>
           <span>Price: </span>
-          <p className="number">${ticket.price}</p>
+          <p className='number'>${ticket.price}</p>
         </div>
-        <Link href="/tickets/[ticketId]" as={`/tickets/${ticket.id}`}>
-          <a class="btn btn-block">View</a>
+        <Link href='/tickets/[ticketId]' as={`/tickets/${ticket.id}`}>
+          <a class='btn btn-block'>View</a>
         </Link>
       </div>
     );
   });
 
-  return (
-<<<<<<< HEAD
-    <div className="tickets">
-      {ticketList}
-=======
-    <div>
-      <h2>Tickets</h2>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Price</th>
-            <th></th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {ticketList}
-        </tbody>
-      </table>
->>>>>>> fb6603f813036a763cfe1cd5a773378a8fe472db
-    </div>
-  )
+  return <div className='tickets'>{ticketList}</div>;
 };
 
 // will be executed during server side rendering process
@@ -58,7 +36,6 @@ const LandingPage = ({ currentUser, tickets }) => {
   - Hard refresh of the page
   - Clicking link from different domain
   - Typing URL into address bar
-
   getInitialProps executed on the client:
   - Navigation from one page to another while in the app
 */

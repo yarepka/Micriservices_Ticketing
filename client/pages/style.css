@@ -24,7 +24,7 @@ body {
 ul {
   margin: 0;
   padding: 0;
-  list-style: none;  
+  list-style: none;
 }
 
 a {
@@ -84,7 +84,7 @@ input:focus {
 }
 
 .btn:focus {
-  outline:none;
+  outline: none;
 }
 
 .text-centered {
@@ -173,7 +173,8 @@ input:focus {
   font-weight: bold;
 }
 
-.ticket .price span, .ticket .number {
+.ticket .price span,
+.ticket .number {
   font-size: 1.3rem;
 }
 
@@ -187,6 +188,7 @@ input:focus {
   border-radius: 3px;
   border: 2px solid var(--text-color);
   font-size: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .order .status {
@@ -201,20 +203,19 @@ input:focus {
   margin-left: 16px;
 }
 
-
-@media(max-width: 1200px) {
+@media (max-width: 1200px) {
   .tickets {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media(max-width: 900px) {
+@media (max-width: 900px) {
   .tickets {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media(max-width: 500px) {
+@media (max-width: 500px) {
   .btn-block-mobile {
     width: 100%;
     text-align: center;
@@ -240,7 +241,8 @@ input:focus {
     width: 100%;
   }
 
-  #navbar > a, #navbar ul li:not(:last-child) {
+  #navbar > a,
+  #navbar ul li:not(:last-child) {
     margin-bottom: 10px;
   }
 
@@ -252,12 +254,23 @@ input:focus {
     width: 100%;
     margin: 0;
   }
+
+  .orders .order {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .orders .order > div {
+    display: block;
+  }
+
+  .order > div:first-child p:last-child {
+    margin-left: 0;
+  }
 }
 
-@media(max-width: 300px) {
+@media (max-width: 300px) {
   .ticket {
     width: 100%;
   }
 }
-
-
